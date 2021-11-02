@@ -1,0 +1,7 @@
+.DS_Store
+dns_svr
+main.o
+socket.o
+tools.o
+dns_svr.log
+

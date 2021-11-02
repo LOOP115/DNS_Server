@@ -1,0 +1,498 @@
+COMP30023 2021 Project 2 After Deadline Tests
+v34, last modified 27/05
+
+HEAD is now at 4d6324f Final version
+Commit log:
+4d6324f2bed2955d3c8cf281c1f1d88e45d689b8: Final version
+117973039aee10ba00c2282fcff0213b00245075: Makefile bug fix
+11d4fbf88f0d4d5d8239c1653ed58fa4b3341243: Add single thread
+39676d7462882ceff8194e394043874a5e46aa07: Refactor main
+c4dab7fbe533cccc4e1abdc10548c9b41b352688: Try epoll
+d1201497746ab19a408f0ce171bb8a068aa2679f: Try setting timeout
+1cc371629ba9f8d062a646182fe1a7d3c3a70e8e: Delete fcntl
+0437b06b23771fdc1819655d503ea8db11edd99e: Try fcntl for non-blocking
+92565843e5fb23dd1eb2b415f62b5a842ab1824c: Test task 7
+922d6847265cae0daf4e2b9e8edf12e96bf20ec6: Test non-blocking
+08681d84b272fdaad34f8f540c3fb33182ba976e: Define non-blocking
+f8bec2e29f786156adcce6a650b5c6de44623583: Cache finished
+4e5a522729afe5060c9428653ccce350ef15283c: Reduce TTL
+bf35436ac811023cac054a2ab2ec8eada9b21847: Try to solve vc2 log
+a5450a498f2576f44e9c1abd03435dc674e7ff5b: Log bug fix
+7819b60155cd2eed7b1ca6181a0bc9e5f295391e: Search from cache
+03f5e6f49d425feceb15608c4de71a8adb03698d: Cache insertion and eviction
+eb329e1c5124e46fee3e430dbab361eafc48ffd0: Initialize cache
+e5f1487e5de8d608d84f3c71bb8d7d686e5eaa05: Try defining cache
+54c8911486ef68b710f505ed1c8e97ad81742143: Standard option finished
+bc1d75dcdd1a775f38ba29a21cba40cfd9f5b3ff: Check IPV6 bug fixed
+9eec5adcea03d44b5f40e6c4466f3730963372c1: Non-AAAA request bug fixed
+0b1a4f7f15768ce534ad24212594947b15d1beba: Task3 ve1 bug fix
+6bd52b67311fc85d78258077da95bfd12cc795d8: QR and RCODE bug fix
+09387ac683008e9f2045429301329caa8ee97124: Improve reading packet
+5c8e8c196404fc6d7519fd47fe4415fdf2c60561: Modify QR and RCODE
+c7195693a4f1eaa3a611249c274fbd06b3a9f20c: Receive packet from upstream and update log
+37ec204ce1d5653040f4244ffdf7b22a1ab256a6: Send packet to upstream server
+feacb8016226b083e427f4a82decf09dcb5e5863: Extract domain name from packet
+ea6508e8cf26eabeea78c338d6dfb61721fbed7d: Check if the type is AAAA
+dc705e624dc1ee9fa8d65686670b9221daed3f51: Get timestamp of packet
+25f946bd9d5e46c34f3e51fce16e00352de7375f: Fix Makefile
+6544ef9624d0ccf6676f5b9e70e3290707db291c: Create files for helper funcs and setup log
+0cebb0c77885592630c9038d283f235f89ad906f: Read packet
+9dbecb4d6e02f70a15e34e26e2058fcfd2c6c2b6: Socket bug fixed
+26f358f9fce0da9c601e391196efde625c3a6fd7: Setup Client Socket
+9b0a5ca33bdf70abdfecf805a1fc0a53e189ae4a: Create separate files for socket functions
+2f93f54bbc1f7d98deed1e7c010c5736b193f825: Setup Server Socket
+085ce78844fb47eb0381e94365c66c3965a024dc: init: add .gitlab-ci.yml
+
+make -B && make clean (output suppressed)
+
+make clean
+rm -f dns_svr main.o socket.o tools.o
+
+make
+gcc -Wall -c -o main.o main.c -g -lpthread
+gcc -Wall -c -o socket.o socket.c -g
+gcc -Wall -c -o tools.o tools.c -g
+gcc -Wall -o dns_svr main.o socket.o tools.o -g -lpthread
+
+
+OK -- ./dns_svr found
+CACHING: 1, NON-BLOCKING: 1
+
+Task 1 vn1 (0.30) -- AAAA record: Passed
+Task 2 vn1 (0.30) -- AAAA record (Log): Passed
+Task 1 vn2 (0.30) -- double AAAA record: Passed
+Task 2 vn2 (0.30) -- double AAAA record (Log): Passed
+Task 1 hn1 (0.20) -- 6 AAAA record (see yahoo.com for example): Passed
+Task 2 hn1 (0.30) -- 6 AAAA record (Log): Passed
+Task 1 hn8 (0.00) -- 256 AAAA record: Failed
+--------------------------------------------------------------------
+Mismatch between expected/program outputs
+diff
+;; communications error to 127.0.0.1#8053: end of file						   |	256.comp30023.		60	IN	AAAA	2001:db8::
+												   |	256.comp30023.		60	IN	AAAA	2001:db8::1
+;; Connection to 127.0.0.1#8053(127.0.0.1) for 256.comp30023 failed: connection refused.	   |	256.comp30023.		60	IN	AAAA	2001:db8::2
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::3
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::4
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::5
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::6
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::7
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::8
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::9
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::a
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::b
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::c
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::d
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::e
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::f
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::10
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::11
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::12
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::13
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::14
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::15
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::16
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::17
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::18
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::19
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::1a
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::1b
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::1c
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::1d
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::1e
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::1f
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::20
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::21
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::22
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::23
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::24
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::25
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::26
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::27
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::28
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::29
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::2a
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::2b
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::2c
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::2d
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::2e
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::2f
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::30
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::31
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::32
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::33
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::34
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::35
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::36
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::37
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::38
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::39
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::3a
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::3b
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::3c
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::3d
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::3e
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::3f
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::40
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::41
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::42
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::43
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::44
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::45
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::46
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::47
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::48
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::49
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::4a
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::4b
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::4c
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::4d
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::4e
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::4f
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::50
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::51
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::52
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::53
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::54
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::55
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::56
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::57
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::58
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::59
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::5a
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::5b
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::5c
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::5d
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::5e
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::5f
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::60
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::61
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::62
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::63
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::64
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::65
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::66
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::67
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::68
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::69
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::6a
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::6b
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::6c
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::6d
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::6e
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::6f
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::70
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::71
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::72
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::73
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::74
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::75
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::76
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::77
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::78
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::79
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::7a
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::7b
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::7c
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::7d
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::7e
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::7f
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::80
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::81
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::82
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::83
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::84
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::85
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::86
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::87
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::88
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::89
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::8a
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::8b
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::8c
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::8d
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::8e
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::8f
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::90
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::91
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::92
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::93
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::94
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::95
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::96
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::97
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::98
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::99
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::9a
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::9b
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::9c
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::9d
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::9e
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::9f
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::a0
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::a1
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::a2
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::a3
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::a4
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::a5
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::a6
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::a7
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::a8
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::a9
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::aa
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ab
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ac
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ad
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ae
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::af
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::b0
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::b1
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::b2
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::b3
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::b4
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::b5
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::b6
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::b7
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::b8
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::b9
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ba
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::bb
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::bc
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::bd
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::be
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::bf
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::c0
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::c1
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::c2
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::c3
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::c4
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::c5
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::c6
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::c7
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::c8
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::c9
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ca
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::cb
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::cc
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::cd
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ce
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::cf
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::d0
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::d1
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::d2
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::d3
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::d4
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::d5
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::d6
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::d7
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::d8
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::d9
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::da
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::db
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::dc
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::dd
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::de
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::df
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::e0
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::e1
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::e2
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::e3
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::e4
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::e5
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::e6
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::e7
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::e8
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::e9
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ea
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::eb
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ec
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ed
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ee
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ef
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::f0
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::f1
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::f2
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::f3
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::f4
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::f5
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::f6
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::f7
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::f8
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::f9
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::fa
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::fb
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::fc
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::fd
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::fe
+												   >	256.comp30023.		60	IN	AAAA	2001:db8::ff
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Program has terminated unexpectedly
+--------------------------------------------------------------------
+/test.sh: line 380:   492 Aborted                 (core dumped) "$EXE_PATH" 127.0.0.1 "$port" &> /tmp/"$id"
+Task 2 hn8 (0.00) -- 256 AAAA record (Log): Failed (Partial: 0.00)
+--------------------------------------------------------------------
+[ERROR]: Log entry missing/not matched: 256.comp30023 is at 2001:db8::
+[ERROR]: Expected 2 lines, found 1
+--------------------------------------------------------------------
+Task 1 vn3 (0.20) -- multiple AAAA queries: Passed
+Task 2 vn3 (0.30) -- multiple AAAA queries (Log): Passed
+Task 1 hn2 (0.15) -- multiple AAAA queries extended: Passed
+Task 2 hn2 (0.30) -- multiple AAAA queries extended (Log): Passed
+Task 1 hn3 (0.20) -- AAAA address without ::: Passed
+Task 2 hn3 (0.30) -- AAAA address without :: (Log): Passed
+Task 1 hn7 (0.00) -- case sensitivity: Passed
+Task 2 hn7 (0.00) -- case sensitivity (Log): Passed
+Task 1 vn4 (0.20) -- AAAA ::1 (loopback): Passed
+Task 2 vn4 (0.30) -- AAAA ::1 (loopback) (Log): Passed
+Task 1 hn4 (0.20) -- multiple AAAA ending with ::: Failed
+--------------------------------------------------------------------
+Mismatch between expected/program outputs
+diff
+;; communications error to 127.0.0.1#8053: end of file						   |	end.comp30023.		60	IN	AAAA	2001:388:6074::
+												   |	end2.comp30023.		60	IN	AAAA	2001:db8::
+;; Connection to 127.0.0.1#8053(127.0.0.1) for end.comp30023 failed: connection refused.	   |	end3.comp30023.		60	IN	AAAA	2001:db8:0:0:1::
+;; Connection to 127.0.0.1#8053(127.0.0.1) for end2.comp30023 failed: connection refused.	   <
+;; Connection to 127.0.0.1#8053(127.0.0.1) for end3.comp30023 failed: connection refused.	   <
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Program has terminated unexpectedly
+--------------------------------------------------------------------
+/test.sh: line 380:  1391 Aborted                 (core dumped) "$EXE_PATH" 127.0.0.1 "$port" &> /tmp/"$id"
+Task 2 hn4 (0.30) -- multiple AAAA ending with :: (Log): Failed (Partial: 0.05)
+--------------------------------------------------------------------
+[ERROR]: Log entry missing/not matched: end.comp30023 is at 2001:388:6074::
+[ERROR]: Log entry missing/not matched: requested end2.comp30023
+[ERROR]: Log entry missing/not matched: end2.comp30023 is at 2001:db8::
+[ERROR]: Log entry missing/not matched: requested end3.comp30023
+[ERROR]: Log entry missing/not matched: end3.comp30023 is at 2001:db8:0:0:1::
+[ERROR]: Expected 6 lines, found 1
+--------------------------------------------------------------------
+Task 1 vn5 (0.20) -- domain with no AAAA records: Passed
+Task 2 vn5 (0.30) -- domain with no AAAA records (Log): Passed
+Task 1 hnb (0.00) -- domain with no AAAA records (but has A records - i.e. not NXDOMAIN): Passed
+Task 2 hnb (0.00) -- domain with no AAAA records (but has A records - i.e. not NXDOMAIN) (Log): Passed
+Task 1 hn5 (0.20) -- names with multiple labels: Passed
+Task 2 hn5 (0.25) -- names with multiple labels (Log): Passed
+Task 1 vn6 (0.20) -- CNAME AAAA: Passed
+Task 2 vn6 (0.25) -- CNAME AAAA (Log): Passed
+Task 1 vn7 (0.20) -- 63 char label: Passed
+Task 2 vn7 (0.25) -- 63 char label (Log): Passed
+Task 1 hn6 (0.20) -- 255 octet name: Failed
+--------------------------------------------------------------------
+Mismatch between expected/program outputs
+diff
+;; communications error to 127.0.0.1#8053: end of file						   |	abcdefghijklmnopqrstuvwxy-----12345-----12345-----12345-----123.abcde-----fghij-----12345-----12
+												   <
+;; Connection to 127.0.0.1#8053(127.0.0.1) for abcdefghijklmnopqrstuvwxy-----12345-----12345----   <
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Program has terminated unexpectedly
+--------------------------------------------------------------------
+/test.sh: line 380:  2186 Aborted                 (core dumped) "$EXE_PATH" 127.0.0.1 "$port" &> /tmp/"$id"
+Task 2 hn6 (0.25) -- 255 octet name (Log): Failed (Partial: 0.12)
+--------------------------------------------------------------------
+[ERROR]: Log entry missing/not matched: abcdefghijklmnopqrstuvwxy-----12345-----12345-----12345-----123.abcde-----fghij-----12345-----12345-----12345-----12345-----123.abcde-----fghij-----12345-----12345-----12345-----12345-----123.abcde-----fghij-----12345-----12345-----12345eeeeee.comp30023 is at 2001:388:6074::7547:ffff
+[ERROR]: Expected 2 lines, found 1
+--------------------------------------------------------------------
+Task 1 hn9 (0.00) -- AAAA TLD (see ai. for example): Passed
+Task 2 hn9 (0.00) -- AAAA TLD (Log): Passed
+Task 1 hna (0.00) -- AAAA Root: Passed
+Task 2 hna (0.00) -- AAAA Root (Log): Passed
+Task 1 hnc (0.00) -- Client connects after 3.5s (with server tcp timeout of 3s): Passed
+Task 1 hnd (0.00) -- dns_svr supports ipv6? - i.e. "over TCP" (Extra): Failed
+--------------------------------------------------------------------
+Mismatch between expected/program outputs
+diff
+;; Connection to ::1#8053(::1) for 1.comp30023 failed: connection refused.			   |	1.comp30023.		60	IN	AAAA	2001:388:6074::7547:1
+--------------------------------------------------------------------
+Task 1 vs1 (0.25) -- TCP Stream: Passed
+Task 2 vs1 (0.30) -- TCP Stream (Log): Passed
+Task 3 ve1 (0.15) -- PTR record MX unimelb.edu.au (0b1100 | rcode 4): Passed
+Task 3 ve1 (0.15) -- PTR record MX unimelb.edu.au (0b1100 | rcode 4) (Log): Passed
+Task 3 he1 (0.20) -- A record (0b1 | rcode 4): Passed
+Task 3 he1 (0.20) -- A record (0b1 | rcode 4) (Log): Passed
+Task 3 he2 (0.15) -- TYPE284 record (0x011c | rcode 4): Passed
+Task 3 he2 (0.15) -- TYPE284 record (0x011c | rcode 4) (Log): Passed
+Task 3 he3 (0.00) -- CDNSKEY record (0b111100 | rcode 4): Passed
+Task 3 he3 (0.00) -- CDNSKEY record (0b111100 | rcode 4) (Log): Passed
+Task 3 he4 (0.00) -- TXT record (rcode 4): Passed
+Task 3 he4 (0.00) -- TXT record (rcode 4) (Log): Passed
+Task 6 vc1 (0.15) -- TTL is decrementing? (No log): Passed
+Task 6 vc2 (0.00) -- 3s TTL (check for expiry): Passed
+Task 6 vc2 (0.30) -- 3s TTL (check for expiry) (Log): Passed
+Task 6 vc3 (0.00) -- cache eviction 1: Passed
+Task 6 vc3 (0.30) -- cache eviction 1 (Log): Passed
+/test.sh: line 380:  3994 Aborted                 (core dumped) "$EXE_PATH" 127.0.0.1 "$port" &> /tmp/"$id"
+Task 6 hc1 (0.00) -- cache eviction 2: Failed
+--------------------------------------------------------------------
+Mismatch between expected/program outputs
+diff
+;; communications error to 127.0.0.1#8053: end of file						   |	c0.comp300233.		86400	IN	AAAA	2001:388:6074::7547:0
+												   |	c0.comp30023.		86400	IN	AAAA	2001:388:6074::7547:0
+;; Connection to 127.0.0.1#8053(127.0.0.1) for c0.comp300233 failed: connection refused.	   |	c1.comp30023.		86400	IN	AAAA	2001:388:6074::7547:1
+;; Connection to 127.0.0.1#8053(127.0.0.1) for c0.comp30023 failed: connection refused.		   |	c2.comp30023.		86400	IN	AAAA	2001:388:6074::7547:2
+;; Connection to 127.0.0.1#8053(127.0.0.1) for c1.comp30023 failed: connection refused.		   |	c3.comp30023.		86400	IN	AAAA	2001:388:6074::7547:3
+;; Connection to 127.0.0.1#8053(127.0.0.1) for c2.comp30023 failed: connection refused.		   |	c3.comp30023.		86400	IN	AAAA	2001:388:6074::7547:3
+;; Connection to 127.0.0.1#8053(127.0.0.1) for c3.comp30023 failed: connection refused.		   |	c5.comp30023.		86400	IN	AAAA	2001:388:6074::7547:5
+;; Connection to 127.0.0.1#8053(127.0.0.1) for c3.comp30023 failed: connection refused.		   <
+;; Connection to 127.0.0.1#8053(127.0.0.1) for c5.comp30023 failed: connection refused.		   <
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+Program has terminated unexpectedly
+--------------------------------------------------------------------
+Task 6 hc1 (0.25) -- cache eviction 2 (Log): Failed (Partial: 0)
+--------------------------------------------------------------------
+[ERROR]: Log entry missing/not matched: c0.comp300233 is at 2001:388:6074::7547:0
+[ERROR]: Log entry missing/not matched: requested c0.comp30023
+[ERROR]: Log entry missing/not matched: c0.comp30023 is at 2001:388:6074::7547:0
+[ERROR]: Log entry missing/not matched: requested c1.comp30023
+[ERROR]: Log entry missing/not matched: c1.comp30023 is at 2001:388:6074::7547:1
+[ERROR]: Log entry missing/not matched: requested c2.comp30023
+[ERROR]: Log entry missing/not matched: c2.comp30023 is at 2001:388:6074::7547:2
+[ERROR]: Log entry missing/not matched: requested c3.comp30023
+[ERROR]: Log entry missing/not matched: c3.comp30023 is at 2001:388:6074::7547:3
+[ERROR]: Log entry missing/not matched: requested c3.comp30023
+[ERROR]: Log entry missing/not matched: c3.comp30023 expires at 2021-05-03T11:39:53+0000
+[ERROR]: Log entry missing/not matched: c3.comp30023 is at 2001:388:6074::7547:3
+[ERROR]: Log entry missing/not matched: requested c5.comp30023
+[ERROR]: Log entry missing/not matched: replacing c0.comp300233 by c5.comp30023
+[ERROR]: Log entry missing/not matched: c5.comp30023 is at 2001:388:6074::7547:5
+[ERROR]: Expected 16 lines, found 1
+[INFO]: Missing cache lines for task 6, no marks awarded
+--------------------------------------------------------------------
+Task 6 hc2 (0.00) -- cache eviction 3: Passed
+Task 6 hc2 (0.25) -- cache eviction 3 (Log): Passed
+Task 6 hc3 (0.00) -- cache eviction expire: Passed
+Task 6 hc3 (0.25) -- cache eviction expire (Log): Passed
+Task 7 vb1 (0.20) -- Delay 1 (sleep) & send 1: Passed
+Task 7 vb1 (0.20) -- Delay 1 (sleep) & send 1 (Log): Passed
+Task 7 vb2 (0.20) -- Delay 1 (sleep) & send 2: Passed
+Task 7 vb2 (0.20) -- Delay 1 (sleep) & send 2 (Log): Passed
+Task 7 hb1 (0.20) -- Delay 1 (sleep) & send 3: Passed
+Task 7 hb1 (0.20) -- Delay 1 (sleep) & send 3 (Log): Passed
+Task 7 hb2 (0.20) -- Delay 2 & send 1 (ABC -> CBA): Passed
+Task 7 hb2 (0.10) -- Delay 2 & send 1 (ABC -> CBA) (Log): Passed
+Task 7 hb3 (0.00) -- Delay 1 + stream & send: Passed
+Task 7 hb4 (0.00) -- Delay 1 + stream (split prefix) & send (Piazza @1072): Passed
+Task 7 hb5 (0.00) -- Client breaks connection (Piazza @1116): Passed
+Task 7 hb6 (0.00) -- 100 requests: Passed
+
+=============== Automated Grading Assumptions Below =================
+Re-examination Guidelines: If you'd like to have your assessment grade reviewed, you need to fill the grade review form.
+Do not email as it is very difficult to keep track of 500+ students using email, we prefer to have everything visible on a single spreadsheet.
+
+=============== START RESULTS TABLE ====================
+Task 1: DNS responses                       2.60
+Task 2: Log output                          3.62
+Task 3: Error handling                      1.00
+Task 4: Build quality                       2
+Task 5: Quality of software practices       1.5
+Task 6: Caching                             1.25
+Task 7: Non-blocking                        1.50
+Project 2 (Total):                          13.47
+================ END RESULTS TABLE =====================
+Assessor comments:
+Acceptable use of version control
+Good, descriptive comments
+Use of pthreads without appropriate locking (if CACHE=1, -0.5 for task 6 capped)
+Well modularised/structured
